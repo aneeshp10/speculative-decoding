@@ -25,11 +25,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="src/frontend/public/golden-gate.png" alt="Logo" width="80" height="80">
-  </a>
 
-<h3 align="center">San Francisco StreetSense</h3>
+<h3 align="center">Speculative Decoding for Faster LLM Inference</h3>
 
   <p align="center">
     Not all routes are equal—StreetSense shows you how risk really changes along your walk in San Francisco.
@@ -79,47 +76,45 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About StreetSense San Francisco
+## About
 
-[![Product Name Screen Shot][product-screenshot]](https://san-francisco-safety-index.vercel.app/)
-
-StreetSense is a data-driven walking safety tool that helps people understand how risk changes along a route, not just where they start and end. It analyzes historical patterns across San Francisco at a block-level resolution, factoring in time of day and day of week to estimate expected risk for different paths. Instead of labeling neighborhoods as “safe” or “unsafe,” StreetSense surfaces how context and timing shape risk, giving users situational awareness as they plan their walk. The goal is not fear, but clarity—helping people make informed, confident choices about how they move through the city.
+This project implements speculative decoding from scratch using a draft and target transformer model to accelerate autoregressive text generation.
+Speculative decoding is a technique that improves inference speed by allowing a smaller draft model to propose multiple tokens at once, which are then verified by a larger target model. If the tokens are accepted, the target model can skip multiple generation steps, reducing overall latency.
+The goal of this project was to understand how speculative decoding works internally and measure the real performance gains in practice.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- GETTING STARTED -->
-## Why StreetSense?
-As a San Francisco resident, I’ve often noticed that how a walk feels can change dramatically depending on the time of day, even when the route itself stays the same. When commuting between two points, I’ve found myself weighing whether to walk, take public transit, or call a ride - not because of distance, but because of uncertainty about context. Existing maps optimize for speed, but they don’t help answer questions about situational risk. StreetSense grew out of wanting a more data-driven way to estimate expected risk for a given route, time, and day—so people can make more informed choices about how they move through the city.
+## Motivation
+Autoregressive generation in large language models is inherently slow because tokens are generated one at a time.
+Speculative decoding addresses this by:
+  - Using a smaller draft model to generate several candidate tokens
+  - Letting the larger target model verify them in parallel
+  - Accepting valid tokens and skipping generation steps
+  - When the acceptance rate is high, the target model can effectively generate multiple tokens per step, significantly improving throughput.
 
-- Walking risk isn’t uniform across a city or a route
-- Time of day often matters more than distance
-- Neighborhood-level labels hide important block-level variation
-- Existing maps optimize for speed, not situational awareness
-
-## How It Works (High-Level)
-- Routes are broken into short segments using H3 geospatial indexing
-- Each segment is scored using a machine-learning model trained on historical data based on location, day of the week, and time
-- Scores are aggregated to highlight relatively higher and lower-risk portions of a route
-- Results are visualized as a color-coded path overlay
-  - 🟩 = Safe
-  - 🟨 = Moderately Safe
-  - 🟧 = Moderately Risky
-  - 🟥 = Risky
+## Process
+The implementation follows the speculative decoding algorithm described in the literature.
+At each step:
+  - The draft model proposes γ tokens.
+  - The target model evaluates the probability of those tokens.
+  - Tokens are accepted or rejected using the verification rule.
+  - Accepted tokens are appended to the output.
+  - If rejection occurs, the target model samples the next token normally.
+This process repeats until the sequence is complete.
 
 
-## What StreetSense Is (and isn't)
-
-**What It Is**
-- A situational awareness tool
-- A way to compare routes, not label places
-- Time-sensitive and context-aware
-
-**What It Is Not:**
-- A *real-time* crime tracker
-- A guarantee of safety
-- A judgment of neighborhoods or people
-
+## Experiment Setup
+To evaluate the implementation, I tested speculative decoding across:
+Two prompt categories
+  - Natural language prompts
+  - Algorithmic / coding prompts
+  
+Different draft lengths (γ) => γ = 2, 4, 6, 8
+For each run I measured:
+  - Acceptance rate
+  - Tokens generated per second
+  - End-to-end generation speed
 
 ## Tech Stack
 
@@ -129,20 +124,26 @@ As a San Francisco resident, I’ve often noticed that how a walk feels can chan
 - Geospatial indexing: H3
 - Deployment: Vercel (frontend), Render (backend)
 
-## Limitations
+## Results
 
-- Risk estimates are based on historical patterns, not real-time conditions.
-- The model captures expected risk, not rare or unpredictable events.
-- Scores are probabilistic and should be interpreted comparatively, not absolutely.
-- Results may reflect reporting bias present in public incident data.
+Key observations from the experiments:
+  - Acceptance rate: ~75% on average
+  - Speedup: ~1.5× compared to baseline autoregressive decoding
+  - Increasing γ improves speed up to a point, after which diminishing returns appear.
+These results show that speculative decoding can provide meaningful inference acceleration even with a relatively simple implementation.
 
-## Potential Improvements
-- Experiment with different ML models and hyperparameter tuning
-- Incorporate objective data we have on arrests made and degree of danger posed to fellow residents - this will help set the initial categorial scores better
-- Batch route scoring to reduce latency and improve responsiveness.
-- Precomputed risk maps by time bucket for faster lookups.
-- Support for alternate routes optimized for lower expected risk.
-- Extending the approach beyond San Francisco.
+ 
+
+## Future Improvements
+- Add KV-Cache Support
+  - This version does not include a KV-Cache. Each verification step recomputes attention for the full sequence instead of reusing cached key/value tensors from previous tokens.
+  - Because of this, the measured speedups represent the gains from speculative decoding alone, rather than the combination of speculative decoding and standard inference optimizations
+- Explore Different Draft/Target Model Pairs
+  - Different architecture families, distilled models, finetuned models, etc.
+- Batched Speculative Decoding
+  -  Extending this implementation to support batched speculative decoding would better simulate production LLM inference pipelines.
+-  Benchmark Longer Generations
+  - The current evaluation primarily measures tokens/sec and acceptance rate. A deeper evaluation could include: time-to-first-token (TTFT), per-token latency, end-to-end latency
 
 ## Contributing
 
