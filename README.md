@@ -132,6 +132,9 @@ Key observations from the experiments:
   - Increasing γ improves speed up to a point, after which diminishing returns appear.
 These results show that speculative decoding can provide meaningful inference acceleration even with a relatively simple implementation.
 
+<a href="https://github.com/github_username/repo_name">
+    <img src="evals/speedu_gamma.png" alt="Logo" width="80" height="80">
+  </a>
  
 
 ## Future Improvements
