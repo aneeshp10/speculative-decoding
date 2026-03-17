@@ -127,14 +127,47 @@ For each run I measured:
 ## Results
 
 Key observations from the experiments:
-  - Acceptance rate: ~75% on average
-  - Speedup: ~1.5× compared to baseline autoregressive decoding
+  - Acceptance rate: Peaked at 75% (speculative length = 2), and lows at ~50% (speculative length = 8)
+    - Noticed an inverse proportionality between speculative length and acceptance rate
+  - Speedup: ~1.35× compared to baseline autoregressive decoding
   - Increasing γ improves speed up to a point, after which diminishing returns appear.
+  - Naturally, speculative decoding outperformed in the'coding' domain compared to natural language
+    - Coding problems are objective and following tokens are narrower compared to an open-ended question which has a higher count of candidates to start off a sequence.
+    - My hypothesis is that fine-tuning a draft model might bump up the acceptance rate + throughput in open-ended, NL domains
 These results show that speculative decoding can provide meaningful inference acceleration even with a relatively simple implementation.
 
+
+**Speedup Ratio (speculative-to-baseline) when varying Gamma**
+<div class="image-container">
 <a href="https://github.com/github_username/repo_name">
-    <img src="evals/speedu_gamma.png" alt="Logo" width="80" height="80">
-  </a>
+    <img src="evals/speedu_gamma.png" alt="Logo" width="550" height="550">
+</a>
+</div>
+
+
+ **Tokens/sec (Throughput) when varying Gamma**
+<div class="image-container">
+<a href="https://github.com/github_username/repo_name">
+    <img src="evals/tok_per_sec_gamma.png" alt="Logo" width="550" height="550">
+</a>
+</div>
+
+
+ **Acceptance Rate when varying Gamma**
+<div class="image-container">
+<a href="https://github.com/github_username/repo_name">
+    <img src="evals/acceptance_rate_gamma.png" alt="Logo" width="550" height="550">
+</a>
+</div>
+
+
+ **Domain-wise Means**
+<div class="image-container">
+<a href="https://github.com/github_username/repo_name">
+    <img src="evals/domain_wise_acceptance.png" alt="Logo" width="550" height="550">
+</a>
+</div>
+
  
 
 ## Future Improvements
