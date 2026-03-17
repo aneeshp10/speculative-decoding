@@ -29,7 +29,7 @@
 <h3 align="center">Speculative Decoding for Faster LLM Inference</h3>
 
   <p align="center">
-    Not all routes are equal—StreetSense shows you how risk really changes along your walk in San Francisco.
+    Two LLMs vs One! Which one's faster?
     <br />
     <a href="https://github.com/aneeshp10"><strong>Explore the docs »</strong></a>
     <br />
@@ -41,36 +41,6 @@
     <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
-
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-streetsense-san-francisco">About StreetSense San Francisco</a>
-    </li>
-    <li>
-      <a href="#how-it-works-high-level">How It Works (High-Level)</a>
-    </li>
-    <li>
-      <a href="#what-streetsense-is-and-isnt">What StreetSense Is (and isn’t)</a>
-    </li>
-    <li>
-      <a href="#tech-stack">Tech Stack</a>
-    </li>
-    <li>
-      <a href="#limitations">Limitations</a>
-    </li>
-    <li>
-      <a href="#potential-improvements">Potential Improvements</a>
-    </li>
-    <li>
-      <a href="#contributing">Contributing</a>
-    </li>
-  </ol>
-</details>
 
 
 
