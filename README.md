@@ -151,6 +151,32 @@ These results show that speculative decoding can provide meaningful inference ac
 -  Benchmark Longer Generations
   - The current evaluation primarily measures tokens/sec and acceptance rate. A deeper evaluation could include: time-to-first-token (TTFT), per-token latency, end-to-end latency
 
+## Appendix
+The prompts based on domain:
+```
+CODE_PROMPTS = {
+    "binary_search": "Write Python code for binary search. ONLY output the code - no explanations or markdown.",
+    "union_find": "Write Python code to implement union find with path compression and union by rank. ONLY output the code - no explanations or markdown.",
+    "dijkstra": "Write Python code for Dijkstra's algorithm using a priority queue. ONLY output the code - no explanations or markdown.",
+    "bfs": "Write Python code for breadth-first search on a graph. ONLY output the code - no explanations or markdown.",
+    "dfs": "Write Python code for depth-first search on a graph. ONLY output the code - no explanations or markdown.",
+    "topological_sort": "Write Python code for topological sort using Kahn's algorithm. ONLY output the code - no explanations or markdown.",
+    "lru_cache": "Write Python code to implement an LRU cache class. ONLY output the code - no explanations or markdown.",
+    "quicksort": "Write Python code for quicksort. ONLY output the code - no explanations or markdown.",
+}
+
+NL_PROMPTS = {
+    "explain_binary_search": "Explain how binary search works in simple terms.",
+    "explain_union_find": "Explain how union find works, including path compression and union by rank.",
+    "explain_dijkstra": "Explain how Dijkstra's algorithm works and when to use it.",
+    "explain_bfs": "Explain breadth-first search and how it differs from depth-first search.",
+    "explain_dfs": "Explain depth-first search and give an example use case.",
+    "explain_topological_sort": "Explain topological sort and when it is applicable.",
+    "explain_lru_cache": "Explain how an LRU cache works and why it is useful.",
+    "explain_quicksort": "Explain how quicksort works step by step.",
+}
+```
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
