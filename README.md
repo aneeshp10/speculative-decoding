@@ -29,7 +29,7 @@
 <h3 align="center">Speculative Decoding for Faster LLM Inference</h3>
 
   <p align="center">
-    Two LLMs vs One! Which one's faster?
+    Two LLMs vs One! What's faster?
     <br />
     <a href="https://github.com/aneeshp10"><strong>Explore the docs »</strong></a>
     <br />
